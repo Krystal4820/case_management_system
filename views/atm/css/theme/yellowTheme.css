@@ -1,0 +1,60 @@
+.query_table>tbody>tr>td {
+  border: 3px #fc0 solid;
+  background-color: #f1db92;
+}
+
+.query_table>tbody>tr>td>button {
+  background-color: white;
+  width:auto; 
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.query_table>tbody>tr>td>button:hover {
+  background-color: #e2b31c;
+}
+
+.query_table>tbody>tr>td>span>button {
+  background-color: yellow;
+  border: #e2c31c;
+  width:auto; 
+  padding-right: 10px;
+  padding-left: 10px;
+  border-radius: 8px;
+}
+
+.query_table>tbody>tr>td>span>button:hover {
+  background-color: yellow;
+  border: yellow;
+  width:auto; 
+  padding-right: 10px;
+  padding-left: 10px;
+  border-radius: 8px;
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.data_table {
+  border: 3px #eaf2da solid;
+}
+
+.data_table>thead>tr>th {
+  border: 1px #fff solid;
+  background-color: #e2c31c;
+  font-weight: normal;
+}
+
+.data_table>tbody>tr:nth-child(even) {
+  background-color: #fff;
+}
+
+.data_table>tbody>tr:nth-child(odd) {
+  background-color: #ededed;
+}
+
+.data_table>tbody>tr>td {
+  border: 1px #ededed solid;
+}
+
+.selected {
+  border: 3px #c18b4e solid;
+}

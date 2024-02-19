@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html class="">
+
+<head>
+  <title>癒心鄉個案管理系統</title>
+  <link rel="stylesheet" href="externals/Bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style/index.css">
+  <link rel="icon" type="image/x-icon" href="favicon.png" />
+</head>
+
+<body onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
+  <div class="wrapper">
+    <form id="login" action="/login" method="post" class="login-form">
+      <div class="header">
+        <h1>&emsp;<img src="favicon.png" width="30" height="30">&ensp;&nbsp;癒心鄉</h1>
+        <h2>&emsp;個案管理系統</h2>
+      </div>
+      <div class="content">
+        <input id="username" type="text" class="input username" name="username" placeholder="帳號""
+        autofocus>
+        <input id="password" type="password" class="input password" name="password" placeholder="密碼">
+      </div>
+      <div class="footer">
+        <input type="button" class="button1" value="預約表單回覆" onclick="window.open('https://docs.google.com/forms/d/1p1KpJaNkUE0-cabkXX7neertclzQvkTYladAk903nec/edit#responses')">
+        <button type="submit" class="button">登入</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

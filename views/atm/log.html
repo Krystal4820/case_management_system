@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html ng-app="ATMrApp">
+
+<head>
+    <title>癒心鄉個案管理系統</title>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="no-cache" http-equiv="cache-control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="0" http-equiv="expires">
+    <script src="../externals/angularjs/angular.min.js"></script>
+    <script src="../externals/jquery/jquery-1.11.1.min.js"></script>
+    <script src="../externals/jqueryui/jquery-ui.min.js"></script>
+    <script src="..//externals/jqueryui/datepicker-zh-TW.js"></script>
+    <script src="/atm/scripts/order.js"></script>
+    <link href="/atm/css/theme/shared.css" rel="stylesheet">
+    <link href="/atm/css/theme/matTable.css" rel="stylesheet">
+    <link href="/atm/css/theme/yellowTheme.css" rel="stylesheet">
+    <link href="/atm/css/theme/angular-loading.css" rel="stylesheet">
+    <link rel="/atm/stylesheet" href="../externals/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../externals/jqueryui/jquery-ui.min.css">
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jqueryui/style.css">
+  </head>
+
+<body ng-controller="ATMCtrl">
+    <div class="container" style="width:100%">
+        <div class="table-responsive">
+            <table class="query_table" style="overflow:hidden;word-wrap: break-word;">
+                <tbody ng-model="selectedLog">
+                    <tr>
+                        <td>
+                            <button ng-click="Insert()"><strong>新增(所有空格皆須填)</strong></button>
+                            <button ng-click="Update()"><strong>修改(必填ID)</strong></button>
+                            <button ng-click="Query()"><strong>查詢所有個案</strong></button>
+                            <button ng-click="Clear()"><strong>清除</strong></button>
+                            <label>清單總筆數：{{LogListSize}}  </label>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <button ng-click="Delete()"><strong>刪除(必填ID)</strong></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong style="color: blue;">個案基本資料</strong><br>
+                            <span style="color: blue;">進案日期：</span>&emsp;
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Inday">
+                            <span style="color: blue;">&nbsp;個案編號(身分證)：</span>
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.IdNo">&nbsp&nbsp
+                            <span style="color: blue;">姓名：&nbsp;</span>&emsp;&ensp;&nbsp;
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Name">&nbsp&nbsp
+                            <span style="color: blue;">BSRS：</span>
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.BSRS">&nbsp&nbsp
+                            <span style="color: blue;">若無，一定要填(0+0)</span>
+                            <br>
+                            <span style="color: blue;">生日：&ensp;&emsp;&ensp;&emsp;</span>
+                            <!--230508-->                
+                            <input type="date" size="8" ng-model="selectedLog.Birthday">&nbsp;
+                            <!--230508-->
+                            <span style="color: blue;">年齡：&ensp;&emsp;&ensp;&emsp;</span>&ensp;&emsp;&emsp;&nbsp;
+                            <input maxlength="20" type="text" size="1" ng-model="selectedLog.Age">&emsp;&emsp;&ensp;&nbsp;&nbsp;&nbsp;
+                            <span style="color: blue;">&emsp;聯絡電話：</span>
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Phone">&nbsp&nbsp
+                            <span style="color: blue;">住址：&nbsp;</span>
+                            <input maxlength="40" type="text" size="40" ng-model="selectedLog.Addr">&nbsp&nbsp
+                            <br>
+                            <span style="color: blue;">緊急連絡人：</span>
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Emergency_Contact_Person">&nbsp
+                            <span style="color: blue;">緊急連絡人電話：</span>&ensp;&nbsp;
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Emergency_Contact_Phone">&nbsp&nbsp
+                            <span style="color: blue;">個案來源：</span>
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.Come">
+                              <option>網路預約</option>
+                              <option>電話預約</option>
+                              <option>臨櫃預約</option>
+                              <option>轉介</option>
+                              <option>MOU轉介</option>
+                            </select>
+                            <span style="color: blue;">&ensp;縣市：</span>
+                            <!--<input maxlength="20" type="text" size="10" ng-model="selectedLog.City">-->
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.City">
+                              <option>北投區</option>
+                              <option>士林區</option>
+                              <option>內湖區</option>
+                              <option>松山區</option>
+                              <option>中山區</option>
+                              <option>大同區</option>
+                              <option>南港區</option>
+                              <option>信義區</option>
+                              <option>其他地區</option>
+                            </select>
+                            <span style="color: blue;">&ensp;縣市：</span>
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.City2">
+                              <option>大安區</option>
+                              <option>中正區</option>
+                              <option>萬華區</option>
+                              <option>文山區</option>
+                              <option>新北市</option>
+                              <option>基隆</option>
+                              <option>桃園</option>
+                              <option>新竹</option>
+                            </select>
+                            <span style="color: blue;">&emsp;性別：</span>
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.Gender">
+                              <option>男</option>
+                              <option>女</option>
+                              <option>無</option>
+                              <option>其他</option>
+                            </select>
+                          </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          &nbsp;<img src="../images/warning.png" width="15" height="15">&nbsp;
+                          <strong style="color: red;">請更新狀態</strong>&emsp;
+                          <span style="color: blue;">狀態：</span>&emsp;&emsp;
+                          <span>
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Status">
+                            <option>無</option>
+                            <option>待初談</option>
+                            <option>待派案</option>
+                            <option>諮商中</option>
+                            <option>已結案</option>
+                            <option>未初談未開案</option>
+                            <option>已初談未開案</option>
+                            <option>轉介未開案</option>
+                            <option>轉介已開案</option>
+                          </select>
+                          </span>
+                          <span style="color: blue;">&ensp;來談議題：</span>&emsp;
+                          <!--<input maxlength="100" type="text" size="40" ng-model="selectedLog.ConsultIssue">-->
+                          <select style="height:20px; width:180px;" ng-model="selectedLog.ConsultIssue">
+                            <option>壓力與情緒困擾</option>
+                            <option>家庭議題</option>
+                            <option>親密關係議題</option>
+                            <option>重大失落生活變故</option>
+                            <option>醫療健康心理問題</option>
+                            <option>生涯規劃</option>
+                            <option>人際問題</option>
+                            <option>自我認識</option>
+                            <option>自殺自傷</option>
+                          </select>
+                          <span style="color: blue;">&ensp;來談議題：</span>
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.ConsultIssue2">
+                            <option>學習問題</option>
+                            <option>行為困擾</option>
+                            <option>死亡與悲傷</option>
+                            <option>親子關係</option>
+                            <option>其他</option>
+                          </select>
+                        </td>
+                      </tr>  
+                      <tr>  
+                        <td>
+                            &nbsp;<img src="../images/first.png" width="17" height="17">&nbsp;
+                            <strong style="color: blue;">待初談</strong>&emsp;&emsp;&ensp;&nbsp;
+                            <span style="color: blue;">初談員：</span>&emsp;
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.Firsttime_Person">
+                              <option>無</option>
+                              <option>王美惠</option>
+                              <option>蕭永晶</option>
+                              <option>顧濤</option>
+                              <option>張瑜妏</option>
+                              <option>張祐瑄</option>
+                              <option>林翊絜</option>
+                              <option>黃郁璇</option>
+                              <option>陳瑩靜</option>
+                              <option>賈宜蓁</option>
+                              <option>張智宇</option>
+                            </select>
+                            <span style="color: blue;">&ensp;初談員備註：</span>
+                            <input maxlength="100" type="text" size="50" ng-model="selectedLog.Firsttime_Note">&ensp;
+                            <span style="color: blue;">&ensp;初談日期：</span>
+                            <input maxlength="100" type="text" size="20" ng-model="selectedLog.Firsttime_Date">&emsp;
+                            <span><button><a href="https://drive.google.com/drive/my-drive" target="_blank"><img src="../images/google-drive.png" width="20" height="20"></a></button></span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                            &nbsp;<img src="../images/record.png" width="17" height="17">&nbsp;
+                            <strong style="color: blue;">待派案</strong>&emsp;&emsp;&ensp;&nbsp;
+                            <span style="color: blue;">心理師：</span>&emsp;
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.Psychologist">
+                              <option>無</option>
+                              <option>王美惠</option>
+                              <option>蕭永晶</option>
+                              <option>顧濤</option>
+                              <option>張瑜妏</option>
+                              <option>張祐瑄</option>
+                              <option>林翊絜</option>
+                              <option>黃郁璇</option>
+                              <option>陳瑩靜</option>
+                              <option>賈宜蓁</option>
+                              <option>張智宇</option>
+                              <option>潭如萍</option>
+                              <option>彭美齡</option>
+                              <option>張郁君</option>
+                              <option>楊淑敏</option>
+                              <option>李曉芬</option>
+                              <option>陳昱融</option>
+                              <option>吳思穎</option>
+                              <option>張育萍</option>
+                              <option>林昀芊</option>
+                            </select>
+                            <span style="color: blue;">&ensp;心理師備註：</span>
+                            <input maxlength="100" type="text" size="50" ng-model="selectedLog.Psychologist_Note">&ensp;
+                            <span><button><a href="https://drive.google.com/drive/my-drive" target="_blank"><img src="../images/google-drive.png" width="20" height="20"></a></button></span>
+                        </td>
+                      </tr>
+                      <tr>  
+                        <td>
+                            &nbsp;<img src="../images/hearts.png" width="17" height="17">&nbsp;
+                            <strong style="color: blue;">諮商中</strong>&emsp;&emsp;&ensp;&nbsp;
+                            <span style="color: blue;">諮商期間：</span>
+                            <!--230508-->
+                            <!-- <input maxlength="20" type="text" size="10" ng-model="selectedLog.Consultstart"> -->
+                            <input type="date" size="10" ng-model="selectedLog.Consultstart">
+                            <!--230508-->
+                            <span style="color: blue;">~</span>
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Consultend">
+                            <span style="color: blue;">&emsp;&nbsp;&nbsp;&nbsp;諮商期間填入格式(ex.2021/12/22-2022/06/04)</span>
+                            <br>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;
+                            <span style="color: blue;">諮商時間：每週</span>
+                            <input maxlength="20" type="text" size="1" ng-model="selectedLog.Consulttime_week">
+                            <span style="color: blue;">時間：</span>
+                            <input maxlength="20" type="text" size="10" ng-model="selectedLog.Consulttime">
+                            <span style="color: blue;">&emsp;諮商時間填入格式(ex.10:00-11:00)</span>
+                            <br>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            <span style="color: blue;">&ensp;諮商次數：</span>
+                            <input maxlength="10" type="text" size="10" ng-model="selectedLog.ConsultNo">&nbsp;
+                            <span style="color: blue;">&ensp;通報：</span>
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.Call">
+                              <option>無</option>
+                              <option>自殺通報</option>
+                              <option>家暴通報</option>
+                            </select>
+                            <span style="color: blue;">&ensp;黑名單：</span>
+                            <input maxlength="10" type="text" size="1" ng-model="selectedLog.Black">
+                            <span style="color: blue;">&nbsp;諮商次數填入格式(ex.3) 黑名單(請填是.否)</span>
+                            <br>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;
+                            <span style="color: blue;">諮商模式：</span>
+                            <select style="height:20px; width:105px;" ng-model="selectedLog.ConsultMode">
+                              <option>個別</option>
+                              <option>伴侶</option>
+                              <option>親子</option>
+                              <option>家庭</option>
+                              <option>其他</option>
+                            </select>
+                        </td>
+                      </tr>
+                      <tr >
+                        <td>
+                          &nbsp;<img src="../images/feedback.png" width="17" height="17">&nbsp;
+                          <strong style="color: blue;">個案回饋表</strong> 
+                          &emsp;<button ng-click="Query_FeedBack_show()"><strong>顯示</strong></button> 
+                          &ensp;<button ng-click="Query_FeedBack_nonedisplay()"><strong>隱藏</strong></button> 
+                          <div id="FeedBack_table" style="display:none;">
+                          <span style="color: blue;">您接受諮詢、晤談服務的次數：</span>
+                          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q1">
+                            <option>無</option>
+                            <option>1-3次</option>
+                            <option>4-6次</option>
+                            <option>7-9次</option>
+                            <option>9次以上</option>
+                          </select>
+                          <span style="color: blue;">&ensp;本次與您晤談的諮詢人員是：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+                          &emsp;&emsp;&emsp;&ensp;
+                          <input maxlength="10" type="text" size="10" ng-model="selectedLog.Feedback_Q2">
+                          <br>
+                          <span style="color: blue;">諮詢員/心理師能瞭解您討論的事情或話題：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q3">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;諮詢員/心理師專注傾聽您說的話：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q4">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">諮詢員/心理師提供您情緒上的支持、使您感覺溫暖：</span>&emsp;&emsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q5">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;諮詢員/心理師協助您整理情緒：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q6">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">諮詢員/心理師幫助您分析問題的癥結：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q7">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;諮詢員/心理師協助您發展解決問題的具體方法：</span>&ensp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q8">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">諮詢員/心理師幫助您對自己或事情有更深的領悟或認識：</span>
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q9">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;諮詢員/心理師提供的諮詢是有幫助的：</span>&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q10">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">在晤談中您能說您想說的話：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q11">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;與諮詢員的晤談，對您的問題有幫助：</span>&emsp;&emsp;&emsp;&emsp;&nbsp;&ensp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q12">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">您滿意與諮詢員的關係：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q13">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;日後若有事情想談，您會想再安排諮詢晤談：</span>&emsp;&emsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q14">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">諮詢晤談的整體的作業流程步驟清楚：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q15">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;諮詢晤談中心的整體場地、設施、環境設置得宜：</span>
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q16">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">接待員的服務態度親切得宜：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q17">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <span style="color: blue;">&ensp;您對整體的行政服務感到滿意：</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                          <select style="height:20px; width:105px;" ng-model="selectedLog.Feedback_Q18">
+                            <option>無</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>  
+                          <br>
+                          <span style="color: blue;">其他任何您想表達的意見：</span>
+                          <input maxlength="100" type="text" size="100" ng-model="selectedLog.Feedback_Q19">
+                          </div>
+                        </td>
+                      </tr>
+                </tbody>
+            </table>
+        </div>
+        <div dw-loading="LogList" dw-loading-options="{text: '載入清單...'}"
+             class="scrollable-area table-responsive scrollColor" style="float:left;width:100%;margin:5px">
+            <table id="setting" class="data_table">
+                <thead>
+                    <tr>
+                        <th ng-click="orderCol='Inday'; reverseList=!reverseList;" style="position: sticky; top:0;">進案日期</th>
+                        <th ng-click="orderCol='IdNo'; reverseList=!reverseList;" style="position: sticky; top:0;">ID</th>
+                        <th ng-click="orderCol='Name'; reverseList=!reverseList;" style="position: sticky; top:0;">姓名</th>
+                        <th ng-click="orderCol='BSRS'; reverseList=!reverseList;" style="position: sticky; top:0;">BSRS</th>
+                        <th ng-click="orderCol='Status'; reverseList=!reverseList;" style="position: sticky; top:0;">狀態</th>
+                        <!-- <th ng-click="orderCol='Birthday'; reverseList=!reverseList;">生日</th>
+                        <th ng-click="orderCol='Phone'; reverseList=!reverseList;">聯絡電話</th>
+                        <th ng-click="orderCol='Addr'; reverseList=!reverseList;">住址</th>
+                        <th ng-click="orderCol='Emergency_Contact_Person'; reverseList=!reverseList;">緊急聯絡人</th>
+                        <th ng-click="orderCol='Emergency_Contact_Phone'; reverseList=!reverseList;">緊急聯絡人電話</th> -->
+                        <th ng-click="orderCol='Firsttime_Person'; reverseList=!reverseList;" style="position: sticky; top:0;">初談員</th>
+                        <th ng-click="orderCol='Firsttime_Note'; reverseList=!reverseList;" style="position: sticky; top:0;">初談員備註</th>
+                        <th ng-click="orderCol='Psychologist'; reverseList=!reverseList;" style="position: sticky; top:0;">心理師</th>
+                        <th ng-click="orderCol='Psychologist_Note'; reverseList=!reverseList;" style="position: sticky; top:0;">心理師備註</th>
+                        <th ng-click="orderCol='Consultstart'; reverseList=!reverseList;" style="position: sticky; top:0;">諮商開始期間</th>
+                        <th ng-click="orderCol='Consultend'; reverseList=!reverseList;" style="position: sticky; top:0;">諮商結束期間</th>
+                        <th ng-click="orderCol='Consulttime_week'; reverseList=!reverseList;" style="position: sticky; top:0;">諮商星期</th>
+                        <th ng-click="orderCol='Consulttime'; reverseList=!reverseList;" style="position: sticky; top:0;">諮商時間</th>
+                        <th ng-click="orderCol='ConsultNo'; reverseList=!reverseList;" style="position: sticky; top:0;">諮商次數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr name="LogList" ng-click="getLog(LogItem,$event.target);" ng-repeat=" LogItem in LogList | orderBy:orderCol:reverseList">
+                        <td>{{LogItem.Inday}}</td>
+                        <td>{{LogItem.IdNo}}</td>
+                        <td>{{LogItem.Name}}</td>
+                        <td>{{LogItem.BSRS}}</td>
+                        <td>{{LogItem.Status}}</td>
+                        <!-- <td>{{LogItem.Birthday}}</td>
+                        <td>{{LogItem.Phone}}</td>
+                        <td>{{LogItem.Addr}}</td>
+                        <td>{{LogItem.Emergency_Contact_Person}}</td>
+                        <td>{{LogItem.Emergency_Contact_Phone}}</td> -->
+                        <td>{{LogItem.Firsttime_Person}}</td>
+                        <td>{{LogItem.Firsttime_Note}}</td>
+                        <td>{{LogItem.Psychologist}}</td>
+                        <td>{{LogItem.Psychologist_Note}}</td>
+                        <td>{{LogItem.Consultstart}}</td>
+                        <td>{{LogItem.Consultend}}</td>
+                        <td>{{LogItem.Consulttime_week}}</td>
+                        <td>{{LogItem.Consulttime}}</td>
+                        <td>{{LogItem.ConsultNo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
